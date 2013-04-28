@@ -1,0 +1,9 @@
+{>layout/}
+{<main}
+<h2>Frank Sinatra - Greatest Hits</h2>
+<ul>
+{#songs}
+  <li><a href="/songs/{$idx}">{.}</a></li>
+{/songs}
+</ul>
+{/main}

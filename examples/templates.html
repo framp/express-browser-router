@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title>Express Router in a browser</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="js/dust-core-1.2.3.min.js"></script> 
+    <script src="views/templates.js"></script>
+    <script src="../router.js"></script>
+  </head>
+  <body>
+  <a href="/">Index</a> - <a href="/songs">Songs</a>
+  <div id="content"></div>
+  
+  <script>
+  var app = new Router()
+  ,   content = $('#content')
+  ,   songs = [
+        'Strangers In The Night', 
+        'Summer Wind', 
+        'It Was a Very Good Year', 
+        'Somewhere In Your Heart', 
+        'Forget Domani', 
+        'Somethin\' Stupid', 
+        'That\'s Life', 
+        'Tell Her (You Love Her Each Day)', 
+        'The World We Knew (Over and Over)', 
+        'When Somebody Loves You', 
+        'This Town', 
+        'Softly, as I Leave You'
+      ]
+  
+  var mmHelper = function (template){
+    return function(req, res){
+      dust.render(template, req.data, function(err, out) {
+        content.html(out);
+      });
+    }
+  }
+  
+  app.get('/', function(req, res, next){
+    req.data = {
+      name: 'framp'
+    };
+    next();
+  }, mmHelper('index'));
+
+  app.get('/songs', function(req, res, next){
+    req.data = {
+      songs: songs
+    };
+    next();
+  }, mmHelper('songs'));
+
+  app.get('/songs/:id', function(req, res, next){
+    req.data = {
+      song: songs[req.params['id']]
+    };
+    next();
+  }, mmHelper('song'));
+
+  
+  app.middleware({ method: 'get', url: '/' });
+  
+  $('body').on('click', 'a', function(event){
+    event.preventDefault();
+    app.middleware({ method: 'get', url: $(this).attr('href') });
+  });
+  
+  </script>
+  </body>
+</html>

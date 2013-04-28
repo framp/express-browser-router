@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>Express Router in a browser</title>
+
+    <script src="../router.js"></script>
+  </head>
+  <body>
+  
+  <a href="/page/1">Page 1</a>
+  <a href="/page/2">Page 2</a>
+  <a href="/page404">Page 404</a>
+  
+  <div id="content"></div>
+  
+  <script>
+  var app = new Router()
+  ,   error = function(){ content.innerHTML = '404 - Page not found'; }
+  ,   content = document.getElementById('content');
+  
+  app.get('/', function(req, res, next){
+    content.innerHTML = 'Index'
+  });
+  app.get('/page/:id', function(req, res, next){
+    content.innerHTML = req.params['id'];
+  });
+  
+  app.middleware({ method: 'get', url: '/' }, {}, error);
+
+  
+  var a = document.getElementsByTagName('a');
+  for (var i=0, l=a.length; i<l; i++){
+    a[i].onclick = function(event){
+      event.preventDefault();
+      var href = this.getAttribute('href');
+      app.middleware({ method: 'get', url: href }, {}, error);
+    }
+  }
+    
+  </script>
+  </body>
+</html>
