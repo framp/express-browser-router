@@ -28,7 +28,7 @@
         'Softly, as I Leave You'
       ]
   
-  var mmHelper = function (template){
+  var renderer = function (template){
     return function(req, res){
       dust.render(template, req.data, function(err, out) {
         content.html(out);
@@ -41,21 +41,21 @@
       name: 'framp'
     };
     next();
-  }, mmHelper('index'));
+  }, renderer('index'));
 
   app.get('/songs', function(req, res, next){
     req.data = {
       songs: songs
     };
     next();
-  }, mmHelper('songs'));
+  }, renderer('songs'));
 
   app.get('/songs/:id', function(req, res, next){
     req.data = {
       song: songs[req.params['id']]
     };
     next();
-  }, mmHelper('song'));
+  }, renderer('song'));
 
   
   app.middleware({ method: 'get', url: '/' });
